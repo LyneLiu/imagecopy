@@ -1,0 +1,2 @@
+# imagecopy
+init cvs demo
