@@ -1,12 +1,10 @@
 package com.image;
 
-import com.google.common.base.Joiner;
-import com.opencsv.CSVWriter;
+
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +15,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
-import java.nio.Buffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by lyne on 2017/4/1.
@@ -42,9 +37,9 @@ public class CustomCSVContainer extends Component {
     /*csv标签*/
     private JLabel csvLabel;
 
-    private Button titleButton;
-    private Button csvButton;
-    private Button multiButton;
+    private JButton titleButton;
+    private JButton csvButton;
+    private JButton multiButton;
 
     private String targetDir;
 
@@ -149,7 +144,7 @@ public class CustomCSVContainer extends Component {
         titleLabel = new JLabel("标题文件（xls）:", JLabel.CENTER);
         csvLabel = new JLabel("csv文件:", JLabel.CENTER);
 
-        titleButton = new Button(" 选择标题文件 ");
+        titleButton = new JButton(" 选择标题文件 ");
         titleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,14 +152,14 @@ public class CustomCSVContainer extends Component {
                 setTitles(titleButtonAction());
             }
         });
-        csvButton = new Button(" 选择csv文件 ");
+        csvButton = new JButton(" 选择csv文件 ");
         csvButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 csvButtonAction();
             }
         });
-        multiButton = new Button(" 多个分裂 ");
+        multiButton = new JButton(" 多个分裂 ");
         multiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -199,20 +194,18 @@ public class CustomCSVContainer extends Component {
         try {
 
             String targetFileName = getTargetDir() + "\\" + csvTackledFile;
-            CSVWriter writer = new CSVWriter(new FileWriter(targetFileName));
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(targetFileName), "UTF-8"));
+            FileOutputStream fileOutputStream = new FileOutputStream(targetFileName);
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream, "UTF-8"));
 
             String version = getCsvVersion();
+            // add bom to csv file
+            bufferedWriter.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF }));
             bufferedWriter.write(version);
             bufferedWriter.newLine();
             bufferedWriter.write(getCsvTitle());
             bufferedWriter.newLine();
             bufferedWriter.write(getCsvName());
             bufferedWriter.newLine();
-
-            /*writer.writeNext(versionArray);
-            writer.writeNext(getCsvTitle().replaceAll(" ","").split("\t"));
-            writer.writeNext(getCsvName().split("\t"));*/
 
             String csvMetaElement = getCsvMetaElement();
 
@@ -226,7 +219,7 @@ public class CustomCSVContainer extends Component {
             }
             bufferedWriter.flush();
             bufferedWriter.close();
-
+            fileOutputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -279,6 +272,8 @@ public class CustomCSVContainer extends Component {
                         }
                     }
                 }
+
+                file.close();
                 return choosedTitles;
             } catch (Exception e) {
                 // do nothing
