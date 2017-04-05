@@ -199,7 +199,6 @@ public class CustomCSVContainer extends Component {
 
             String version = getCsvVersion();
             // add bom to csv file
-            bufferedWriter.write(new String(new byte[] { (byte) 0xEF, (byte) 0xBB,(byte) 0xBF }));
             bufferedWriter.write(version);
             bufferedWriter.newLine();
             bufferedWriter.write(getCsvTitle());
