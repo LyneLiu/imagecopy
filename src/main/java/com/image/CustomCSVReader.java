@@ -111,7 +111,10 @@ public class CustomCSVReader {
 
     public static String bufferReadCsvFile(String fileName) {
 
-        String metaElement = new String();
+        StringBuilder metaElementbuilder = new StringBuilder();
+
+        String metaElement = null;
+
         try {
 
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "UTF-16LE"));
@@ -124,19 +127,18 @@ public class CustomCSVReader {
                     continue;
                 }
 
-                if (index >= 4) {
-                    break;
-                }
-
-                metaElement = nextElement;
+                metaElementbuilder.append(nextElement);
                 index++;
             }
+
 
             bufferedReader.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        metaElement = metaElementbuilder.toString();
 
         Pattern p = Pattern.compile("\"([^\"]*)\"");
         Matcher m = p.matcher(metaElement);
@@ -178,8 +180,10 @@ public class CustomCSVReader {
     }
 
     public static void main(String[] args) {
-        String csvFile = "E:\\image\\image\\分裂后的数据.csv";
-        String[] metaElement = CustomCSVReader.readCsvFile(csvFile);
+        String csvFile = "F:\\temp\\image\\助理详情.csv";
+        String metaElement = CustomCSVReader.bufferReadCsvFile(csvFile);
+        System.out.println(metaElement);
+        /*String[] metaElement = CustomCSVReader.readCsvFile(csvFile);
         List<String> versionAndTitle = CustomCSVReader.readVersionAndTitle(csvFile);
 
         CustomCSVReader customCSVReader = new CustomCSVReader();
@@ -192,6 +196,6 @@ public class CustomCSVReader {
 
         System.out.println(metaElement);
         System.out.println(versionAndTitle.size());
-        System.out.println(convertMetaElement);
+        System.out.println(convertMetaElement);*/
     }
 }
