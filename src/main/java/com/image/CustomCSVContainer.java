@@ -200,7 +200,6 @@ public class CustomCSVContainer extends Component {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream, "UTF-8"));
 
             String version = getCsvVersion();
-            // add bom to csv file
             bufferedWriter.write(version);
             bufferedWriter.newLine();
             bufferedWriter.write(getCsvTitle());
