@@ -20,7 +20,7 @@ public class FileEncodType {
             bis.mark(0);
 
             int read = bis.read(first3Bytes, 0, 3);
-            System.out.println("字节大小："+read);
+            System.out.println("字节大小：" + read);
 
             if (read == -1) {
                 return charset; //文件编码为 ANSI
@@ -43,39 +43,39 @@ public class FileEncodType {
             }
             bis.reset();
 
-   /*if (!checked) {
-    int loc = 0;
+           /*if (!checked) {
+            int loc = 0;
 
-    while ((read = bis.read()) != -1) {
-     loc++;
-     if (read >= 0xF0)
-      break;
-     if (0x80 <= read && read <= 0xBF) // 单独出现BF以下的，也算是GBK
-      break;
-     if (0xC0 <= read && read <= 0xDF) {
-      read = bis.read();
-      if (0x80 <= read && read <= 0xBF) // 双字节 (0xC0 - 0xDF)
-       // (0x80
-       // - 0xBF),也可能在GB编码内
-       continue;
-      else
-       break;
-     } else if (0xE0 <= read && read <= 0xEF) {// 也有可能出错，但是几率较小
-      read = bis.read();
-      if (0x80 <= read && read <= 0xBF) {
-       read = bis.read();
-       if (0x80 <= read && read <= 0xBF) {
-        charset = "UTF-8";
-        break;
-       } else
-        break;
-      } else
-       break;
-     }
-    }
-    // System.out.println( loc + " " + Integer.toHexString( read )
-    // );
-   }*/
+            while ((read = bis.read()) != -1) {
+             loc++;
+             if (read >= 0xF0)
+              break;
+             if (0x80 <= read && read <= 0xBF) // 单独出现BF以下的，也算是GBK
+              break;
+             if (0xC0 <= read && read <= 0xDF) {
+              read = bis.read();
+              if (0x80 <= read && read <= 0xBF) // 双字节 (0xC0 - 0xDF)
+               // (0x80
+               // - 0xBF),也可能在GB编码内
+               continue;
+              else
+               break;
+             } else if (0xE0 <= read && read <= 0xEF) {// 也有可能出错，但是几率较小
+              read = bis.read();
+              if (0x80 <= read && read <= 0xBF) {
+               read = bis.read();
+               if (0x80 <= read && read <= 0xBF) {
+                charset = "UTF-8";
+                break;
+               } else
+                break;
+              } else
+               break;
+             }
+            }
+            // System.out.println( loc + " " + Integer.toHexString( read )
+            // );
+           }*/
 
             bis.close();
         } catch (Exception e) {

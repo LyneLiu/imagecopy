@@ -5,6 +5,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -238,38 +240,75 @@ public class CustomCSVContainer extends Component {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             try {
                 File f = chooser.getSelectedFile();
+
                 // read  and/or display the file somehow. ....
                 FileInputStream file = new FileInputStream(f);
 
-                //Get the workbook instance for XLS file
-                HSSFWorkbook workbook = new HSSFWorkbook(file);
+                if (f.getName().endsWith(".xls")){
 
-                //Get first sheet from the workbook
-                HSSFSheet sheet = workbook.getSheetAt(0);
+                    //Get the workbook instance for XLS file
+                    HSSFWorkbook workbook = new HSSFWorkbook(file);
 
-                //Iterate through each rows from first sheet
-                Iterator<Row> rowIterator = sheet.iterator();
-                while (rowIterator.hasNext()) {
-                    Row row = rowIterator.next();
+                    //Get first sheet from the workbook
+                    HSSFSheet sheet = workbook.getSheetAt(0);
 
-                    //For each row, iterate through each columns
-                    Iterator<Cell> cellIterator = row.cellIterator();
-                    while (cellIterator.hasNext()) {
+                    //Iterate through each rows from first sheet
+                    Iterator<Row> rowIterator = sheet.iterator();
+                    while (rowIterator.hasNext()) {
+                        Row row = rowIterator.next();
 
-                        Cell cell = cellIterator.next();
+                        //For each row, iterate through each columns
+                        Iterator<Cell> cellIterator = row.cellIterator();
+                        while (cellIterator.hasNext()) {
 
-                        switch (cell.getCellType()) {
-                            case Cell.CELL_TYPE_BOOLEAN:
-                                //System.out.println(cell.getBooleanCellValue() + "\t\t");
-                                break;
-                            case Cell.CELL_TYPE_NUMERIC:
-                                //System.out.println(cell.getNumericCellValue() + "\t\t");
-                                break;
-                            case Cell.CELL_TYPE_STRING:
-                                // System.out.println(cell.getStringCellValue() + "\t\t");
-                                choosedTitles.add(cell.getStringCellValue());
-                                break;
+                            Cell cell = cellIterator.next();
+
+                            switch (cell.getCellType()) {
+                                case Cell.CELL_TYPE_BOOLEAN:
+                                    //System.out.println(cell.getBooleanCellValue() + "\t\t");
+                                    break;
+                                case Cell.CELL_TYPE_NUMERIC:
+                                    //System.out.println(cell.getNumericCellValue() + "\t\t");
+                                    break;
+                                case Cell.CELL_TYPE_STRING:
+                                    // System.out.println(cell.getStringCellValue() + "\t\t");
+                                    choosedTitles.add(cell.getStringCellValue());
+                                    break;
+                            }
+
+                            break;
                         }
+
+                    }
+
+                }else if (f.getName().endsWith(".xlsx")){
+                    XSSFWorkbook workbook = new XSSFWorkbook(file);
+                    XSSFSheet sheet = workbook.getSheetAt(0);
+                    Iterator<Row> rowIterator = sheet.iterator();
+                    while (rowIterator.hasNext()) {
+                        Row row = rowIterator.next();
+
+                        //For each row, iterate through each columns
+                        Iterator<Cell> cellIterator = row.cellIterator();
+                        while (cellIterator.hasNext()) {
+
+                            Cell cell = cellIterator.next();
+
+                            switch (cell.getCellType()) {
+                                case Cell.CELL_TYPE_BOOLEAN:
+                                    //System.out.println(cell.getBooleanCellValue() + "\t\t");
+                                    break;
+                                case Cell.CELL_TYPE_NUMERIC:
+                                    //System.out.println(cell.getNumericCellValue() + "\t\t");
+                                    break;
+                                case Cell.CELL_TYPE_STRING:
+                                    // System.out.println(cell.getStringCellValue() + "\t\t");
+                                    choosedTitles.add(cell.getStringCellValue());
+                                    break;
+                            }
+                            break;
+                        }
+
                     }
                 }
 
